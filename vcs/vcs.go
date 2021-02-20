@@ -1,0 +1,5 @@
+package vcs
+
+func CurrentProject() {
+
+}
