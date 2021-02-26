@@ -1,6 +1,7 @@
 package vcs
 
 import (
+	"errors"
 	"log"
 	"os/exec"
 	"regexp"
@@ -9,7 +10,7 @@ import (
 	cronusConfig "github.com/abhinavmsra/cronus/config"
 )
 
-func CurrentBranch(config cronusConfig.Config) string {
+func CurrentBranch(config cronusConfig.Config) (string, error) {
 	out, err := exec.Command("git", "branch", "--show-current").Output()
 	if err != nil {
 		log.Fatal(err)
@@ -21,8 +22,8 @@ func CurrentBranch(config cronusConfig.Config) string {
 	regexMatches := regex.FindAllString(branchName, -1)
 
 	if len(regexMatches) > 0 {
-		return regexMatches[0]
+		return regexMatches[0], nil
 	} else {
-		panic("Couldnt find issue id from branch name")
+		return "", errors.New("Couldnt find issue id from branch name")
 	}
 }

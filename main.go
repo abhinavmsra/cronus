@@ -9,7 +9,11 @@ import (
 
 func main() {
 	config := cronusConfig.Load()
-	taskID := vcs.CurrentBranch(config)
-	jiraIssue := jira.FetchIssue(taskID, config)
-	harvest.Log(jiraIssue, config)
+	taskID, err := vcs.CurrentBranch(config)
+
+	// Only log time when `taskID` is present
+	if err == nil {
+		jiraIssue := jira.FetchIssue(taskID, config)
+		harvest.Log(jiraIssue, config)
+	}
 }
